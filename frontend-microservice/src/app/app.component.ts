@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { faRedo, faListAlt, faCubes } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +7,4 @@ import { faRedo, faListAlt, faCubes } from '@fortawesome/free-solid-svg-icons';
 })
 export class AppComponent {
   title = 'frontend-microservice';
-  faCubes = faCubes;
-  faRedo = faRedo;
-  faListAlt = faListAlt;
 }

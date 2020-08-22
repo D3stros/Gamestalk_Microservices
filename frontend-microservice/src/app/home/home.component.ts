@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { faCubes, faRedo, faListAlt } from '@fortawesome/free-solid-svg-icons';
+import {
+  faRedo,
+  faListAlt,
+  faMailBulk,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-home',
@@ -7,7 +11,7 @@ import { faCubes, faRedo, faListAlt } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-  faCubes = faCubes;
+  faMailBulk = faMailBulk;
   faRedo = faRedo;
   faListAlt = faListAlt;
   constructor() {}
