@@ -1,0 +1,9 @@
+zuul:
+  prefix: /api/auth
+  routes:
+    register-service:
+      path: /register-service/**
+      url: http://localhost:8081
+    login-service:
+      path: /login-service/**
+      url: http://localhost:8082
