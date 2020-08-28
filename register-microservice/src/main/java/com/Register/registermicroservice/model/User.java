@@ -4,13 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 
 import java.time.Instant;
@@ -27,6 +24,7 @@ public class User {
     @GeneratedValue(strategy = IDENTITY)
     private Long userId;
     @NotBlank(message = "Username is required")
+    @Column(unique=true)
     private String username;
     @NotBlank(message = "Password is required")
     private String password;
