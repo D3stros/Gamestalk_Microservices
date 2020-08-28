@@ -7,7 +7,11 @@
           <div class="row">
             <div class="col-xs-12 col-md-12 col-lg-8 mx-auto">
               <h3 class="login-heading mb-4">Registration</h3>
-              <form [formGroup]="signupForm" (ngSubmit)="signup()">
+              <form
+                ngNativeValidate
+                [formGroup]="signupForm"
+                (ngSubmit)="signup()"
+              >
                 <div class="form-label-group">
                   <input
                     type="username"
