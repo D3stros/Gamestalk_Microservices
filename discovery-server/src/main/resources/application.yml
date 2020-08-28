@@ -1,5 +1,4 @@
 zuul:
-  prefix: /api/auth
   routes:
     register-service:
       path: /register-service/**
