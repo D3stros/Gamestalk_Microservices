@@ -1,9 +1,11 @@
 package com.loginmicroservices.loginmicroservices.security;
 
-import com.loginmicroservices.loginmicroservices.exception.GamememosException;
+import com.loginmicroservices.loginmicroservices.exception.MemoneedsException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.core.Authentication;
 import javax.annotation.PostConstruct;
@@ -11,9 +13,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.*;
 import java.security.cert.CertificateException;
+import java.time.Instant;
+import java.util.Date;
+
+import static io.jsonwebtoken.Jwts.parser;
+import static java.util.Date.from;
+
 @Service
 public class JwtProvider {
     private KeyStore keyStore;
+    @Value("${jwt.expiration.time}")
+    private Long jwtExpirationInMillis;
     @PostConstruct
     public void init() {
         try {
@@ -21,7 +31,7 @@ public class JwtProvider {
             InputStream resourceAsStream = getClass().getResourceAsStream("/memoneeds.jks");
             keyStore.load(resourceAsStream, "secret".toCharArray());
         } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException e) {
-            throw new GamememosException("Exception occurred while loading keystore");
+            throw new MemoneedsException("Exception occurred while loading keystore");
         }
     }
     public String generateToken(Authentication authentication) {
@@ -31,11 +41,47 @@ public class JwtProvider {
                 .signWith(getPrivateKey())
                 .compact();
     }
+
+    public String generateTokenWithUserName(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(from(Instant.now()))
+                .signWith(getPrivateKey())
+                .setExpiration(from(Instant.now().plusMillis(jwtExpirationInMillis)))
+                .compact();
+    }
+
     private PrivateKey getPrivateKey() {
         try {
             return (PrivateKey) keyStore.getKey("memoneeds", "secret".toCharArray());
         } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
-            throw new GamememosException("Exception occured while retrieving public key from keystore");
+            throw new MemoneedsException("Exception occured while retrieving public key from keystore");
         }
+    }
+
+    private PublicKey getPublickey() {
+        try {
+            return keyStore.getCertificate("memoneeds").getPublicKey();
+        } catch (KeyStoreException e) {
+            throw new MemoneedsException("Exception occured while retrieving public key from keystore");
+        }
+    }
+
+    public boolean validateToken(String jwt) {
+        parser().setSigningKey(getPublickey()).parseClaimsJws(jwt);
+        return true;
+    }
+
+    public String getUsernameFromJWT(String token) {
+        Claims claims = parser()
+                .setSigningKey(getPublickey())
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject();
+    }
+
+    public Long getJwtExpirationInMillis() {
+        return jwtExpirationInMillis;
     }
 }
