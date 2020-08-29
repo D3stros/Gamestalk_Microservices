@@ -7,11 +7,7 @@
           <div class="row">
             <div class="col-xs-12 col-md-12 col-lg-8 mx-auto">
               <h3 class="login-heading mb-4">Registration</h3>
-              <form
-                ngNativeValidate
-                [formGroup]="signupForm"
-                (ngSubmit)="signup()"
-              >
+              <form [formGroup]="signupForm" (ngSubmit)="signup()">
                 <div class="form-label-group">
                   <input
                     type="username"
@@ -22,6 +18,15 @@
                     required
                     autofocus
                   />
+                  <span
+                    style="margin-left: 25%"
+                    *ngIf="
+                      !signupForm.get('username').valid &&
+                      signupForm.get('username').touched
+                    "
+                  >
+                    Please provid a valid username
+                  </span>
                   <label for="inputUsername">Username</label>
                 </div>
 
@@ -35,6 +40,15 @@
                     required
                     autofocus
                   />
+                  <span
+                    style="margin-left: 25%"
+                    *ngIf="
+                      !signupForm.get('email').valid &&
+                      signupForm.get('email').touched
+                    "
+                  >
+                    Please enter a valid email address
+                  </span>
                   <label for="inputEmail">Email address</label>
                 </div>
 
@@ -47,6 +61,15 @@
                     placeholder="Password"
                     required
                   />
+                  <span
+                    style="margin-left: 25%"
+                    *ngIf="
+                      !signupForm.get('password').valid &&
+                      signupForm.get('password').touched
+                    "
+                  >
+                    Password cannot be empty
+                  </span>
                   <label for="inputPassword">Password</label>
                 </div>
 
