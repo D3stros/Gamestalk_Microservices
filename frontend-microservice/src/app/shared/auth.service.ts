@@ -54,7 +54,7 @@ export class AuthService {
     };
     return this.http
       .post<LoginResponse>(
-        'http://localhost:8080/api/auth/refresh/token',
+        'http://localhost:8761/login-service/api/auth/refresh/token',
         refreshTokenPayload
       )
       .pipe(
