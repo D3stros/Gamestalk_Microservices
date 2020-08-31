@@ -21,13 +21,21 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ml-auto">
-      <a class="nav-link" routerLink="/login" routerLinkActive="active"
-        >Login</a
-      >
-      <a class="nav-link" routerLink="/register" routerLinkActive="active"
-        >Register</a
-      >
-      <a class="nav-link" style="cursor: pointer;">Logout</a>
+      <div *ngIf="!isLoggedIn">
+        <a class="nav-link" routerLink="/login" routerLinkActive="active"
+          >Login</a
+        >
+      </div>
+      <div *ngIf="!isLoggedIn">
+        <a class="nav-link" routerLink="/register" routerLinkActive="active"
+          >Register</a
+        >
+      </div>
+      <div *ngIf="isLoggedIn">
+        <a class="nav-link" style="cursor: pointer" (click)="logout()"
+          >Logout</a
+        >
+      </div>
     </ul>
   </div>
 </nav>

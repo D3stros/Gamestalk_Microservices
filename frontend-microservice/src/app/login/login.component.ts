@@ -50,7 +50,9 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.loginRequestPayload).subscribe(
       (data) => {
         this.isError = false;
-        this.router.navigateByUrl('/dashboard');
+        this.router.navigate(['/dashboard']).then(() => {
+          window.location.reload();
+        });
         this.toastr.success('Login Successful');
       },
       (error) => {

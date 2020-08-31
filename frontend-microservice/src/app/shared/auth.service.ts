@@ -1,6 +1,6 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { SignupRequestPayload } from '../register/signup-request.payload';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { LoginRequestPayload } from '../login/login-request.payload';
 import { LoginResponse } from '../login/login-response.payload';
@@ -13,6 +13,11 @@ import { map, tap } from 'rxjs/operators';
 export class AuthService {
   @Output() loggedIn: EventEmitter<boolean> = new EventEmitter();
   @Output() username: EventEmitter<string> = new EventEmitter();
+
+  refreshTokenPayload = {
+    refreshToken: this.getRefreshToken(),
+    username: this.getUserName(),
+  };
 
   constructor(
     private http: HttpClient,
@@ -66,6 +71,27 @@ export class AuthService {
           this.localStorage.store('expiresAt', response.expiresAt);
         })
       );
+  }
+
+  logout() {
+    this.http
+      .post(
+        'http://localhost:8761/login-service/api/auth/logout',
+        this.refreshTokenPayload,
+        { responseType: 'text' }
+      )
+      .subscribe(
+        (data) => {
+          console.log(data);
+        },
+        (error) => {
+          throwError(error);
+        }
+      );
+    this.localStorage.clear('authenticationToken');
+    this.localStorage.clear('username');
+    this.localStorage.clear('refreshToken');
+    this.localStorage.clear('expiresAt');
   }
 
   getJwtToken() {
